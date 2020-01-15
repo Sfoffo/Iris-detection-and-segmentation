@@ -1,5 +1,5 @@
 # Iris Detection and Segmentation
-This repository contains the Python code and LaTeX files about my Bachelor's degree thesis in Computer Science(see [thesis pdf] (https://github.com/Sfoffo/Iris-detection-and-segmentation/blob/master/Thesis.pdf))
+This repository contains the Python code and LaTeX files about my Bachelor's degree thesis in Computer Science(see [thesis pdf](https://github.com/Sfoffo/Iris-detection-and-segmentation/blob/master/Thesis.pdf))
 
 
 # Description
