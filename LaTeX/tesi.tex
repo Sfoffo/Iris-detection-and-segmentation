@@ -1,0 +1,117 @@
+\documentclass[a4paper,12pt,oneside,openright]{book}
+\usepackage[italian,english]{babel}
+\usepackage[utf8]{inputenc} % inputenc serve a definire con che encoding stai realizzando il tuo documento .tex (quindi dipende dal fatto che tu stia usando Linux, Windows, Apple, o altro
+\usepackage[T1]{fontenc} % fontenc definisce che tipo di caratteri utilizzare nel tuo output (pdf e dvi).
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+% senza uno di questi package dà errore sulla T nell'indice se lo compilo con Overleaf mentre è chiaro con miktex
+% \usepackage{color} l'ho disattivato poiché questo su Overleaf mi dava problemi di visualizzazione di alcune lettere maiuscole T ed F e su miktex non li dava ma mostrava un grigino invece di un nero
+%\usepackage{kpfonts} %kpfonts che risulta essere più scuro ma dà errore sulla N di OSINT sia con miktex che overleaf
+%\usepackage{tgpagella} bruttino come font ma non dà errori di formattazione né di colore eccetto per in numeri a fondo pagina
+%\usepackage{venturis2} % nessun problema ma troppo piccolo
+\usepackage{paratype} % ottimo eccetto per i colori un po' troppo marcati per i titoli
+%\usepackage{tgschola} % ottimo forse un po' più marcato di paratype ma il font sembra più leggibile
+
+
+%per codice inline
+\usepackage{courier}
+%\newcounter{biburlucpenalty}
+%\newcounter{biburllcpenalty}
+\usepackage{url}
+\usepackage{breakurl}
+\usepackage{enumitem} 
+%\setcounter{biburllcpenalty}{7000}
+%\setcounter{biburlucpenalty}{8000}
+
+\usepackage[nopostdot,nogroupskip,nonumberlist]{glossaries-extra}
+\setabbreviationstyle[acronym]{short}
+
+
+% **** Rientro della prima frase di un paragrafo ****
+\usepackage{indentfirst}
+% **** Package + setup interlinea ****
+\usepackage{setspace}
+\setstretch{1.5}
+% **** Bibliografia****
+\usepackage[backend=bibtex,natbib,sorting=none]{biblatex}
+\usepackage[babel]{csquotes}
+\usepackage[hidelinks]{hyperref}
+\addbibresource{biblio.bib}
+% **** Margini ****
+\usepackage[a4paper, top=3cm, bottom=3cm, left=4cm, right=3cm]{geometry}
+% **** Virgolette ****
+\newcommand{\ldq}{\lq\lq}
+\newcommand{\rdq}{\rq\rq}
+% **** Acronimi ****
+\usepackage{acronym}
+
+\usepackage{fancyhdr} % Per inserire footer ed header personalizzati.
+
+% **** Custom box ****
+\usepackage{xcolor}
+% --- per commenti multilinea ---
+\usepackage{verbatim}
+\newcommand{\mybox}[2]{\colorbox{#1!30}{\makebox[\textwidth][l]{#2}}}
+\newcommand{\marco}[1]{\textbf{[Marco: #1]}}
+\begin{comment}
+Non c'è né meglio né peggio. Il problema riguarda i caratteri accentati o, più in generale, quelli da 128 a 255. Se non insegni a LaTeX quale codifica di input usi, non può sapere come trattarli se non con il codice ASCII. Nei font con codifica OT1 i caratteri accentati non ci sono. Provo a farti una divisione in casi, assumendo che il sistema operativo usi una codifica latin1 e che vengano usati i font standard.
+
+(1) Nessuna specifica nel documento: scrivendo "è" non ottieni niente in output
+
+(2) \usepackage[latin1]{inputenc}: scrivendo "è" la lettera "è" viene costruita sovrapponendo l'accento alla "e" (il carattere "è" è attivo, cioè si comporta come una macro).
+
+(3) \usepackage[T1]{fontenc}: scrivendo "è" viene usato il carattere al posto 232 nella codifica T1 che, per fortuna è proprio la "e" accentata.
+
+(4) \usepackage[T1]{\fontenc}+\usepackage[latin1]{inputenc}: scrivendo "è" viene chiamata la macro come nel caso (2); l'effetto è ancora di comporre il carattere 232.
+
+Dirai: "ma allora tanto vale usare solo fontenc". Mica tanto: se usi il carattere "ß", in output troverai qualcosa che non ti aspetti. Lo stesso vale per molti altri codici in input.
+
+Un piccolo problema può esserci se non hai attivato, nella tua distribuzione, le versioni Type1 dei font European Modern che sostituiscono i Computer Modern quando si richiede la codifica T1: la visualizzasione del PDF potrebbe essere tremenda. Con TeX Live questo non accade, potrebbe succedere con MikTeX.
+
+Se poi il tuo sistema operativo (l'editor, a dire il vero) usa UTF8, ti troverai in grandissimi pasticci se non passi a inputenc l'opzione utf8.
+\end{comment}
+
+\interfootnotelinepenalty = 10000
+
+
+\begin{document}
+	\frontmatter % utilizza i numeri romani, dopodiché ricordati di risettare lo stile di pagina di default nel \mainmatter, nel caso non lo faccia lui, con \pagestyle{headings}
+    \include{front}
+    \include{dedica}
+    \include{citazione}
+    \include{abstract}
+		\selectlanguage{italian}
+        \pagestyle{fancy}
+        \fancyhf{} %  \fancyhf{} clears the header and footer, otherwise the elements of the default "plain" page style will appear.
+        \lhead{\leftmark} % \lhead: prints the text set inside the braces on the left side of the header.
+        % \leftmark: adds name and number of the current top-level structure (for example, Chapter for reports and books classes; Section for articles ) in uppercase letters.
+        
+        %\rhead{\thepage} % \rhead prints the text included inside the braces on the right side of the header
+        % \thepage adds number of the current page.
+        \cfoot{\thepage}
+        
+        \renewcommand{\headrulewidth}{0pt}
+		\tableofcontents    
+        \input{acr} 
+        % imports the commands from acr.tex into the target file; it's equivalent to typing all the commands from acr.tex right into the current file where the \input line is. include il file nel punto in cui appare il comando (può essere usato anche nel preambolo);
+        \include{intro}
+        %include il file nel punto in cui appare il comando, dopo un salto pagina (non può essere usato nel preambolo);
+	\mainmatter
+    	\pagestyle{fancy}
+		\fancyhf{}
+		\lhead{\leftmark}
+		\cfoot{\thepage}
+		\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\chaptername}\ \thechapter:\ #1}{}}
+		\renewcommand{\headrulewidth}{0pt}
+		\include{cap_1}
+		\include{cap_2}
+		\include{cap_3}
+		\include{cap_4}
+		\include{cap_5}
+		\include{cap_6}
+	\backmatter
+        \include{ringraziamenti}
+    	\addcontentsline{toc}{chapter}{Bibliografia}
+		\printbibliography
+\end{document}
